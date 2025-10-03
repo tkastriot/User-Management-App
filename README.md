@@ -1,73 +1,74 @@
-# React + TypeScript + Vite
+# React User Management App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A small **React + TypeScript** project built for an internship challenge.  
+The app demonstrates components, state management, routing, forms, and data fetching using **Redux Toolkit** and **Material UI**.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## React Compiler
+- List Users (fetch from JSONPlaceholder API)  
+- Search by name or email  
+- User Details page (edit + delete)  
+- Add New User (Name & Email required, optional phone, website, address, company)  
+- New users appear at the top of the list  
+- Sorting by Name or Email  
+- Responsive UI with Material UI  
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React 18  
+- TypeScript  
+- Vite  
+- Redux Toolkit  
+- React Router  
+- Material UI  
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Getting Started
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+To run the project locally:
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+1. Clone the repository  
+   ```bash
+   git clone https://github.com/tkastriot/User-Management-App.git
+   cd User-Management-App/react-user-management-app
+2. Install dependencies  
+   ```bash
+   npm install
+3. Start the development server  
+   ```bash
+   npm run dev
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+   
+## Project Structure
+
+```text
+src/
+├── App.tsx              # Routes and layout
+├── hooks.ts             # Typed Redux hooks
+├── store.ts             # Redux store setup
+├── usersSlice.ts        # Redux slice (fetch, add, update, delete)
+├── pages/
+│   ├── UsersPage.tsx    # List + search + sort users
+│   ├── AddUserPage.tsx  # Add new user form
+│   └── UserDetailsPage.tsx # Edit/delete user
+
+
+
+## Requirements Completed
+
+- [x] List Users  
+- [x] Search  
+- [x] User Details (edit & delete)  
+- [x] Add New User  
+- [x] Sorting  
+- [x] Redux state management  
+- [x] Responsive UI
+
+
+
