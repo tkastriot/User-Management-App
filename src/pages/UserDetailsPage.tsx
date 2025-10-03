@@ -3,8 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useAppSelector, useAppDispatch } from '../hooks'
 import { Card, CardContent, Typography, Stack, TextField, Button } from '@mui/material'
 import { useEffect, useState } from 'react'
-import type { User } from '../types'
-import { updateUser } from '../usersSlice'
+import type { User } from '../usersSlice'
+import { updateUser, deleteUser } from '../usersSlice'
 
 export default function UserDetailsPage() {
   const { id } = useParams()
@@ -18,13 +18,17 @@ export default function UserDetailsPage() {
   if (!user) return <Typography>User not found.</Typography>
 
   const handleChange = (field: keyof User, value: any) => {
-    if (!form) return
-    setForm({ ...form, [field]: value })
+    setForm(prev => prev ? { ...prev, [field]: value } : prev)
   }
 
   const save = () => {
     if (!form) return
     dispatch(updateUser(form))
+    navigate('/')
+  }
+
+  const remove = () => {
+    dispatch(deleteUser(user.id))
     navigate('/')
   }
 
@@ -37,16 +41,19 @@ export default function UserDetailsPage() {
           <TextField label="Email" value={form?.email ?? ''} onChange={e => handleChange('email', e.target.value)} />
           <TextField label="Phone" value={form?.phone ?? ''} onChange={e => handleChange('phone', e.target.value)} />
           <TextField label="Website" value={form?.website ?? ''} onChange={e => handleChange('website', e.target.value)} />
+
           <Typography variant="subtitle1">Address</Typography>
           <Stack direction={{ xs: 'column', sm: 'row' }} gap={2}>
-            <TextField label="Street" value={form?.address?.street ?? ''} onChange={e => setForm(f => f ? ({ ...f, address: { ...f.address, street: e.target.value }}) : f)} />
-            <TextField label="Suite" value={form?.address?.suite ?? ''} onChange={e => setForm(f => f ? ({ ...f, address: { ...f.address, suite: e.target.value }}) : f)} />
-            <TextField label="City" value={form?.address?.city ?? ''} onChange={e => setForm(f => f ? ({ ...f, address: { ...f.address, city: e.target.value }}) : f)} />
-            <TextField label="Zip" value={form?.address?.zipcode ?? ''} onChange={e => setForm(f => f ? ({ ...f, address: { ...f.address, zipcode: e.target.value }}) : f)} />
+            <TextField label="Street" value={form?.address?.street ?? ''} onChange={e => setForm(f => f ? ({ ...f, address: { ...f.address, street: e.target.value } }) : f)} />
+            <TextField label="Suite" value={form?.address?.suite ?? ''} onChange={e => setForm(f => f ? ({ ...f, address: { ...f.address, suite: e.target.value } }) : f)} />
+            <TextField label="City" value={form?.address?.city ?? ''} onChange={e => setForm(f => f ? ({ ...f, address: { ...f.address, city: e.target.value } }) : f)} />
+            <TextField label="Zip" value={form?.address?.zipcode ?? ''} onChange={e => setForm(f => f ? ({ ...f, address: { ...f.address, zipcode: e.target.value } }) : f)} />
           </Stack>
+
           <Stack direction="row" gap={2}>
             <Button variant="contained" onClick={save}>Save</Button>
             <Button variant="outlined" onClick={() => navigate(-1)}>Cancel</Button>
+            <Button color="error" onClick={remove}>Delete</Button>
           </Stack>
         </Stack>
 

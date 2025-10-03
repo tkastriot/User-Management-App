@@ -18,7 +18,7 @@ export default function UsersPage() {
   const dispatch = useAppDispatch()
   const { items, status, error } = useAppSelector((s) => s.users)
   const [q, setQ] = useState('')
-  const [sortBy, setSortBy] = useState<'name' | 'email'>('name')
+  const [sortBy, setSortBy] = useState<'none' | 'name' | 'email'>('none') // 👈 default = none
 
   useEffect(() => {
     if (status === 'idle') dispatch(fetchUsers())
@@ -31,11 +31,15 @@ export default function UsersPage() {
         u.name.toLowerCase().includes(lower) ||
         u.email.toLowerCase().includes(lower)
     )
-    result = [...result].sort((a, b) => {
+
+    if (sortBy === 'none') {
+      return result // 👈 keep original order (new users stay at top)
+    }
+
+    return [...result].sort((a, b) => {
       if (sortBy === 'name') return a.name.localeCompare(b.name)
       return a.email.localeCompare(b.email)
     })
-    return result
   }, [items, q, sortBy])
 
   if (status === 'loading') {
@@ -61,8 +65,9 @@ export default function UsersPage() {
         select
         label="Sort by"
         value={sortBy}
-        onChange={(e) => setSortBy(e.target.value as 'name' | 'email')}
+        onChange={(e) => setSortBy(e.target.value as 'none' | 'name' | 'email')}
       >
+        <MenuItem value="none">None (keep order)</MenuItem>
         <MenuItem value="name">Name</MenuItem>
         <MenuItem value="email">Email</MenuItem>
       </TextField>
