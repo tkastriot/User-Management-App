@@ -7,6 +7,7 @@ import {
   CardContent,
   Typography,
   TextField,
+  MenuItem,
   Stack,
   CircularProgress
 } from '@mui/material'
@@ -15,29 +16,38 @@ import { Link } from 'react-router-dom'
 
 export default function UsersPage() {
   const dispatch = useAppDispatch()
-  const { items, status, error } = useAppSelector(s => s.users)
+  const { items, status, error } = useAppSelector((s) => s.users)
   const [q, setQ] = useState('')
+  const [sortBy, setSortBy] = useState<'name' | 'email'>('name')
 
   useEffect(() => {
     if (status === 'idle') dispatch(fetchUsers())
   }, [dispatch, status])
 
-  const filtered = useMemo(() => {
+  const filteredAndSorted = useMemo(() => {
     const lower = q.toLowerCase()
-    return items.filter(
-      u =>
+    let result = items.filter(
+      (u) =>
         u.name.toLowerCase().includes(lower) ||
         u.email.toLowerCase().includes(lower)
     )
-  }, [items, q])
+    result = [...result].sort((a, b) => {
+      if (sortBy === 'name') return a.name.localeCompare(b.name)
+      return a.email.localeCompare(b.email)
+    })
+    return result
+  }, [items, q, sortBy])
 
-  if (status === 'loading')
+  if (status === 'loading') {
     return (
       <Stack alignItems="center">
         <CircularProgress />
       </Stack>
     )
-  if (status === 'failed') return <Typography color="error">{error}</Typography>
+  }
+  if (status === 'failed') {
+    return <Typography color="error">{error}</Typography>
+  }
 
   return (
     <Stack gap={2}>
@@ -45,10 +55,20 @@ export default function UsersPage() {
         fullWidth
         label="Search by name or email"
         value={q}
-        onChange={e => setQ(e.target.value)}
+        onChange={(e) => setQ(e.target.value)}
       />
+      <TextField
+        select
+        label="Sort by"
+        value={sortBy}
+        onChange={(e) => setSortBy(e.target.value as 'name' | 'email')}
+      >
+        <MenuItem value="name">Name</MenuItem>
+        <MenuItem value="email">Email</MenuItem>
+      </TextField>
+
       <Grid container spacing={2}>
-        {filtered.map(u => (
+        {filteredAndSorted.map((u) => (
           <Grid item key={u.id} xs={12} sm={6} md={4}>
             <Card variant="outlined">
               <CardContent>
